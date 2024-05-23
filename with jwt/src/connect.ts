@@ -1,10 +1,26 @@
 import mongoose from "mongoose";
+import { student } from "./signUp";
 import User from "./Users";
-mongoose
-  .connect("mongodb://localhost:27017/meradb")
-  .then(() => {
-    console.log("database conneceted!");
-  })
-  .catch((err) => {
+const connectDB = async () => {
+  try {
+    await mongoose.connect("mongodb://localhost:27017/meradb");
+    console.log("Database connected!");
+  } catch (err) {
+    console.error("Database connection error", err);
+  }
+};
+
+var insert = async (next: () => void) => {
+  try {
+    await User.create({
+      name: student.name,
+      password: student.password,
+      div: student.div,
+      grade: student.grade,
+    });
+    next();
+  } catch (err) {
     console.log(err);
-  });
+  }
+};
+export { insert, connectDB };

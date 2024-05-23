@@ -4,6 +4,7 @@ var userSchema = new mongoose.Schema({
   password: String,
   div: Number,
   grade: { type: String, enum: ["A", "B", "C", "D", "E", "F"] },
+  //grade: String
 });
 
 export = mongoose.model("Students", userSchema);
