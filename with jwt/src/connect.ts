@@ -10,7 +10,7 @@ const connectDB = async () => {
   }
 };
 
-var insert = async (next: () => void) => {
+var insert = async () => {
   try {
     await User.create({
       name: student.name,
@@ -18,7 +18,6 @@ var insert = async (next: () => void) => {
       div: student.div,
       grade: student.grade,
     });
-    next();
   } catch (err) {
     console.log(err);
   }

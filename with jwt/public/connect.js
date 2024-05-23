@@ -26,7 +26,7 @@ const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.connectDB = connectDB;
-var insert = (next) => __awaiter(void 0, void 0, void 0, function* () {
+var insert = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield Users_1.default.create({
             name: signUp_1.student.name,
@@ -34,7 +34,6 @@ var insert = (next) => __awaiter(void 0, void 0, void 0, function* () {
             div: signUp_1.student.div,
             grade: signUp_1.student.grade,
         });
-        next();
     }
     catch (err) {
         console.log(err);

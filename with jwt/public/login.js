@@ -12,28 +12,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.student = exports.signup = void 0;
+exports.login = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const Users_1 = __importDefault(require("./Users"));
-var student = { name: "", password: "", div: 0, grade: "" };
-exports.student = student;
-var signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        var user = req.body;
-        var check = yield Users_1.default.find({ name: user.name });
-        if (check == null) {
-            exports.student = student = req.body;
-            student.password = yield bcrypt_1.default.hash(user.password, 10);
-            res.send("signup successfully");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+var secret_key = process.env.SECRET_KEY;
+var login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var user = req.body;
+    var student = yield Users_1.default.findOne({ name: user.name });
+    if (student != null) {
+        if (!(yield bcrypt_1.default.compare(user.password, student.password))) {
+            res.send("password incorrect").sendStatus(500);
         }
         else {
-            res.send("username already exists").status(500);
+            res.send("password correct");
         }
     }
-    catch (err) {
-        console.log(err);
-        res.send("error occured while signing up").status(500);
+    else {
+        res.send("user not found").sendStatus(500);
     }
     next();
 });
-exports.signup = signup;
+exports.login = login;
