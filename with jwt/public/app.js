@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const signUp_1 = require("./signUp");
 const login_1 = require("./login");
+const get_1 = require("./get");
 const connect_1 = require("./connect");
 var app = (0, express_1.default)();
 app.use(express_1.default.json());
@@ -24,6 +25,9 @@ app.post("/signup", signUp_1.signup, (req, res) => __awaiter(void 0, void 0, voi
 }));
 app.post("/login", login_1.login, (req, res) => {
     console.log("done login");
+});
+app.get("/get", get_1.get, (req, res) => {
+    console.log("data got");
 });
 let connect = () => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, connect_1.connectDB)();

@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { signup } from "./signUp";
 import { login } from "./login";
+import { get } from "./get";
 import { connectDB, insert } from "./connect";
 var app = express();
 app.use(express.json());
@@ -10,6 +11,9 @@ app.post("/signup", signup, async (req: Request, res: Response) => {
 });
 app.post("/login", login, (req: Request, res: Response) => {
   console.log("done login");
+});
+app.get("/get", get, (req: Request, res: Response) => {
+  console.log("data got");
 });
 let connect = async () => {
   await connectDB();
