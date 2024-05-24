@@ -14,24 +14,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const Users_1 = __importDefault(require("./Users"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 var secret_key = process.env.SECRET_KEY;
 var login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var user = req.body;
-    var student = yield Users_1.default.findOne({ name: user.name });
-    if (student != null) {
-        if (!(yield bcrypt_1.default.compare(user.password, student.password))) {
-            res.send("password incorrect").sendStatus(500);
+    try {
+        var user = req.body;
+        var student = yield Users_1.default.findOne({ name: user.name });
+        if (student != null) {
+            if (!(yield bcrypt_1.default.compare(user.password, student.password))) {
+                res.send("password incorrect").sendStatus(500);
+            }
+            else {
+                if (secret_key != undefined) {
+                    var token = yield jsonwebtoken_1.default.sign(user, secret_key, {
+                        expiresIn: "1m",
+                    });
+                    res.send("token : " + token);
+                }
+                else {
+                    res.send("secret key undefined").sendStatus(500);
+                }
+            }
         }
         else {
-            res.send("password correct");
+            res.send("user not found").sendStatus(500);
         }
+        next();
     }
-    else {
-        res.send("user not found").sendStatus(500);
+    catch (err) {
+        console.log(err);
     }
-    next();
 });
 exports.login = login;
